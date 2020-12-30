@@ -58,9 +58,9 @@ export class AlexaDeviceHandler {
       } else {
         console.error(`Could not handle command for action '${command.action}' with value '${command.value}'`);
       }
-    } else if (command.action === 'SetBrightness') {
+    } else if (command.action.toLowerCase() === 'SetBrightness'.toLowerCase()) {
       this.ledController.setBrightness(command.value);
-    } else if (command.action === 'SetColor') {
+    } else if (command.action.toLowerCase() === 'SetColor'.toLowerCase()) {
       const rgbColor: RgbColor = ColorConverter.convertHueToRgb({
         hue: command.value.hue,
         saturation: command.value.saturation,
@@ -68,7 +68,7 @@ export class AlexaDeviceHandler {
       });
 
       this.ledController.setColor(rgbColor);
-    } else if (command.action === 'SetColorTemperature') {
+    } else if (command.action.toLowerCase() === 'SetColorTemperature'.toLowerCase()) {
       const rgbColor: RgbColor = colorTemperature[command.value];
 
       this.ledController.setColor(rgbColor);
