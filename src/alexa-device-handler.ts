@@ -1,12 +1,11 @@
 import WebSocket from 'ws';
 import WS2801Controller from 'ws2801-pi';
-import {RgbColor} from './types/rgb-color';
 
 import {ColorConverter} from './color-converter';
 import {defaultConfig} from './config/config';
 import {LedController} from './led-controller';
 
-import {AlexaCommand, Config} from './types/index';
+import {AlexaCommand, colorTemperature, Config, RgbColor} from './types/index';
 
 export class AlexaDeviceHandler {
   private webSocket: WebSocket;
@@ -67,6 +66,10 @@ export class AlexaDeviceHandler {
         saturation: command.value.saturation,
         brightness: command.value.brightness,
       });
+
+      this.ledController.setColor(rgbColor);
+    } else if (command.action === 'SetColorTemperature') {
+      const rgbColor: RgbColor = colorTemperature[command.value];
 
       this.ledController.setColor(rgbColor);
     } else {
