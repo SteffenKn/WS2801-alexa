@@ -1,1 +1,1 @@
-# typescript-template-repository
+# WS2801-alexa-connector

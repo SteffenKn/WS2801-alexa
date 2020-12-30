@@ -1,7 +1,3 @@
-export * from './example';
+export * from './types/index';
 
-import Example from './example';
-
-const example: Example = new Example();
-
-example.hello('Peter');
+export * from './alexa-device-handler';
