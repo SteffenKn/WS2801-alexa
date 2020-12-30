@@ -1,5 +1,5 @@
 {
-  "name": "ws2801-alexa-connector",
+  "name": "ws2801-alexa",
   "version": "0.1.0",
   "description": "An alexa connector for the WS2801-Pi module.",
   "main": "dist/index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SteffenKn/ws2801-alexa-connector.git"
+    "url": "git+https://github.com/SteffenKn/ws2801-alexa.git"
   },
   "keywords": [
     "ws2801",
@@ -20,9 +20,9 @@
   "author": "Steffen Knaup",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SteffenKn/ws2801-alexa-connector/issues"
+    "url": "https://github.com/SteffenKn/ws2801-alexa/issues"
   },
-  "homepage": "https://github.com/SteffenKn/ws2801-alexa-connector#readme",
+  "homepage": "https://github.com/SteffenKn/ws2801-alexa#readme",
   "dependencies": {
     "ws": "^7.4.2",
     "ws2801-pi": "^1.1.0"
