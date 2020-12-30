@@ -1,5 +1,6 @@
 export type Config = {
   apiKey: string,
   deviceId: string,
-  ledAmount: number,
+  ledAmount?: number,
+  logCommands?: boolean,
 };

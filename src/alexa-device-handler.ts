@@ -47,6 +47,10 @@ export class AlexaDeviceHandler {
       return;
     }
 
+    if (this.config.logCommands) {
+      console.log(`Command received: ${JSON.stringify(command, null, 2)}`);
+    }
+
     if (command.action === 'SetPowerState') {
       if (command.value === 'OFF') {
         this.ledController.off();

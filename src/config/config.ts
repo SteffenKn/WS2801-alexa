@@ -4,4 +4,5 @@ export const defaultConfig: Config = {
   apiKey: '',
   deviceId: '',
   ledAmount: 0,
+  logCommands: true,
 };
