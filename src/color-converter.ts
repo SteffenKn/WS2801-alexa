@@ -30,9 +30,9 @@ export class ColorConverter {
       green1 = 0;
       blue1 = c;
     } else if (hueColor.hue >= 300 && hueColor.hue < 360) {
-      red1 = x;
+      red1 = c;
       green1 = 0;
-      blue1 = c;
+      blue1 = x;
     } else {
       throw new Error(`Hue value ${hueColor.hue} is not supported!`);
     }
