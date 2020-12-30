@@ -51,9 +51,9 @@ export class AlexaDeviceHandler {
     }
 
     if (command.action === 'SetPowerState') {
-      if (command.value === 'OFF') {
+      if (command.value.toLowerCase() === 'OFF'.toLowerCase()) {
         this.ledController.off();
-      } else if (command.value === 'ON') {
+      } else if (command.value.toLowerCase() === 'ON'.toLowerCase()) {
         this.ledController.on();
       } else {
         console.error(`Could not handle command for action '${command.action}' with value '${command.value}'`);
