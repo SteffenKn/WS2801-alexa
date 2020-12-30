@@ -16,7 +16,7 @@ export class AlexaDeviceHandler {
 
   private pingTimeout: NodeJS.Timeout;
 
-  constructor(ledController?: WS2801Controller, config?: Config) {
+  constructor(config?: Config, ledController?: WS2801Controller) {
     this.config = config ? config : defaultConfig;
     this.ledController = new LedController(ledController, config);
   }
