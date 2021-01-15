@@ -41,6 +41,10 @@ export class AlexaDeviceHandler {
     });
   }
 
+  public stop(): void {
+    this.webSocket.close();
+  }
+
   private handleCommand(command: AlexaCommand): void {
     if (command.deviceId !== this.config.deviceId) {
       return;
