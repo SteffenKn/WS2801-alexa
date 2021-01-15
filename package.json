@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/SteffenKn/ws2801-alexa#readme",
   "dependencies": {
-    "ws": "^7.4.2",
+    "sinricpro": "2.2.3",
     "ws2801-pi": "^1.1.0"
   },
   "devDependencies": {

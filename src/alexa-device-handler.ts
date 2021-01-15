@@ -1,99 +1,125 @@
-import WebSocket from 'ws';
-import WS2801Controller from 'ws2801-pi';
+import {SinricPro, SinricProActions, SinricProUdp} from 'sinricpro';
+import WS2801Controller, {LedColor} from 'ws2801-pi';
 
-import {ColorConverter} from './color-converter';
 import {defaultConfig} from './config/config';
 import {LedController} from './led-controller';
 
-import {AlexaCommand, colorTemperature, Config, RgbColor} from './types/index';
+import {colorTemperature, Config} from './types/index';
 
+// tslint:disable: no-any
 export class AlexaDeviceHandler {
-  private webSocket: WebSocket;
   private ledController: LedController;
+  private sinric: SinricPro;
+  private udp: SinricProUdp;
 
   private config: Config;
 
-  private pingTimeout: NodeJS.Timeout;
+  private running: boolean = false;
+  private initialized: boolean = false;
 
   constructor(config?: Config, ledController?: WS2801Controller) {
     this.config = config ? config : defaultConfig;
     this.ledController = new LedController(ledController, config);
+
+    this.sinric = new SinricPro(this.config.appKey, [this.config.deviceId], this.config.secretKey, true);
   }
 
   public start(): void {
-    this.webSocket = new WebSocket('ws://iot.sinric.com', {
-      headers: {
-        Authorization : Buffer.from('apikey:' + this.config.apiKey).toString('base64'),
-      },
-    });
-
-    this.webSocket.on('open', (): void => {
-      console.log('Connected. Waiting for commands..');
-    });
-
-    this.webSocket.on('message', (data: string): void => {
-      const command: AlexaCommand = JSON.parse(data);
-      this.handleCommand(command);
-    });
-
-    this.webSocket.on('ping', (): void => {
-      this.heartbeat();
-    });
-  }
-
-  public stop(): void {
-    this.webSocket.close();
-  }
-
-  private handleCommand(command: AlexaCommand): void {
-    if (command.deviceId !== this.config.deviceId) {
+    if (this.running) {
       return;
     }
 
+    this.running = true;
+    this.initialize();
+  }
+
+  public stop(): void {
+    this.running = false;
+  }
+
+  private initialize(): void {
+    if (this.initialized) {
+      return;
+    }
+
+    this.initialized = true;
+
+    const callbacks: any = {
+      setPowerState: this.setPowerState.bind(this),
+      setBrightness: this.setBrightness.bind(this),
+      setColor: this.setColor.bind(this),
+      setColorTemperature: this.setColorTemperature.bind(this),
+    };
+
+    SinricProActions(this.sinric, callbacks);
+
+    this.udp = new SinricProUdp(this.config.deviceId, this.config.secretKey);
+    this.udp.begin(callbacks);
+  }
+
+  private setPowerState(deviceId: string, data: 'On' | 'Off'): boolean {
+    if (!this.running) {
+      return false;
+    }
+
     if (this.config.logCommands) {
-      console.log(`Command received: ${JSON.stringify(command, null, 2)}`);
+      console.log(`Command 'setPowerState' received for device '${deviceId}': ${data}`);
     }
 
-    if (command.action.toLowerCase() === 'SetPowerState'.toLowerCase()) {
-      if (command.value.toLowerCase() === 'OFF'.toLowerCase()) {
-        this.ledController.off();
-      } else if (command.value.toLowerCase() === 'ON'.toLowerCase()) {
-        this.ledController.on();
-      } else {
-        console.error(`Could not handle command for action '${command.action}' with value '${command.value}'`);
-      }
-    } else if (command.action.toLowerCase() === 'SetBrightness'.toLowerCase()) {
-      this.ledController.setBrightness(command.value);
-    } else if (command.action.toLowerCase() === 'SetColor'.toLowerCase()) {
-      const rgbColor: RgbColor = ColorConverter.convertHueToRgb({
-        hue: command.value.hue,
-        saturation: command.value.saturation,
-        brightness: command.value.brightness,
-      });
-
-      this.ledController.setColor(rgbColor);
-    } else if (command.action.toLowerCase() === 'SetColorTemperature'.toLowerCase()) {
-      const rgbColor: RgbColor = colorTemperature[command.value];
-
-      this.ledController.setColor(rgbColor);
+    if (data.toLowerCase() === 'Off'.toLowerCase()) {
+      this.ledController.off();
+    } else if (data.toLowerCase() === 'On'.toLowerCase()) {
+      this.ledController.on();
     } else {
-      console.error(`Could not handle command for action '${command.action}' with value '${command.value}'`);
+      console.error(`Could not setPowerState. (Data: '${data}')`);
+
+      return false;
     }
+
+    return true;
   }
 
-  private restart(): void {
-    this.webSocket.terminate();
+  private setBrightness(deviceId: string, data: number): boolean {
+    if (!this.running) {
+      return false;
+    }
 
-    this.start();
+    if (this.config.logCommands) {
+      console.log(`Command 'setBrightness' received for device '${deviceId}': ${data}`);
+    }
+
+    this.ledController.setBrightness(data);
+
+    return true;
   }
 
-  private heartbeat(): void {
-    clearTimeout(this.pingTimeout);
+  private setColor(deviceId: string, data: LedColor): boolean {
+    if (!this.running) {
+      return false;
+    }
 
-    this.pingTimeout = setTimeout((): void => {
-      console.log('Connection lost. Restarting...');
+    if (this.config.logCommands) {
+      console.log(`Command 'setColor' received for device '${deviceId}': ${JSON.stringify(data, null, 2)}`);
+    }
 
-      this.restart();
-    }, 30000 + 1000);
+    this.ledController.setColor(data);
+
+    return true;
+  }
+
+  private setColorTemperature(deviceId: string, data: number): boolean {
+    if (!this.running) {
+      return false;
+    }
+
+    if (this.config.logCommands) {
+      console.log(`Command 'setColorTemperature' received for device '${deviceId}': ${data}`);
+    }
+
+    const rgbColor: LedColor = colorTemperature[data];
+
+    this.ledController.setColor(rgbColor);
+
+    return true;
   }
 }

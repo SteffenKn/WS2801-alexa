@@ -1,7 +1,8 @@
 import {Config} from '../types/index';
 
 export const defaultConfig: Config = {
-  apiKey: '',
+  appKey: '',
+  secretKey: '',
   deviceId: '',
   ledAmount: 0,
   logCommands: true,
