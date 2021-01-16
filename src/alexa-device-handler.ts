@@ -93,7 +93,7 @@ export class AlexaDeviceHandler {
     return true;
   }
 
-  private setColor(deviceId: string, data: LedColor): boolean {
+  private setColor(deviceId: string, data: {r: number, g: number, b: number}): boolean {
     if (!this.running) {
       return false;
     }
@@ -102,7 +102,13 @@ export class AlexaDeviceHandler {
       console.log(`Command 'setColor' received for device '${deviceId}': ${JSON.stringify(data, null, 2)}`);
     }
 
-    this.ledController.setColor(data);
+    const color: LedColor = {
+      red: data.r,
+      green: data.g,
+      blue: data.b,
+    };
+
+    this.ledController.setColor(color);
 
     return true;
   }
