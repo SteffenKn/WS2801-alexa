@@ -1,12 +1,13 @@
 {
   "name": "ws2801-alexa",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "An alexa connector for the WS2801-Pi module.",
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "lint": "tslint --project .",
-    "start": "node dist/run.js"
+    "start": "node dist/run.js",
+    "start:dev": "npm run build && npm start"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,7 @@
   },
   "homepage": "https://github.com/SteffenKn/ws2801-alexa#readme",
   "dependencies": {
-    "ws": "^7.4.2",
+    "sinricpro": "2.2.3",
     "ws2801-pi": "^1.1.0"
   },
   "devDependencies": {
