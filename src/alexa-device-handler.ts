@@ -1,4 +1,4 @@
-import {SinricPro, SinricProActions, SinricProUdp} from 'sinricpro';
+import {SinricPro, SinricProActions} from 'sinricpro';
 import WS2801Controller, {LedColor} from 'ws2801-pi';
 
 import {defaultConfig} from './config/config';
@@ -10,7 +10,6 @@ import {colorTemperature, Config} from './types/index';
 export class AlexaDeviceHandler {
   private ledController: LedController;
   private sinric: SinricPro;
-  private udp: SinricProUdp;
 
   private config: Config;
 
@@ -52,9 +51,6 @@ export class AlexaDeviceHandler {
     };
 
     SinricProActions(this.sinric, callbacks);
-
-    this.udp = new SinricProUdp(this.config.deviceId, this.config.secretKey);
-    this.udp.begin(callbacks);
   }
 
   private setPowerState(deviceId: string, data: 'On' | 'Off'): boolean {
