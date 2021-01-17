@@ -1,1 +1,1 @@
-# WS2801-alexa-connector
+# WS2801-alexa
