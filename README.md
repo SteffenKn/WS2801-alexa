@@ -1,6 +1,6 @@
 # WS2801-alexa
 
-WS2801-alexa is a package that controls led strips via WS2801-pi on alexa voice commands.
+WS2801-alexa is a package that controls led strips via WS2801-pi on Alexa voice commands.
 
 ## Wiring
 
@@ -45,11 +45,11 @@ alexaDeviceHandler.start();
 ## Configuration
 
 The config can be specified when initializing the AlexaDeviceHandler.
-If no config was specified or if the repository is used, the defaultConfig which is stored [here](./src/config/config.ts).
+If no config is specified or the repository is used, the defaultConfig is used, which is stored [here](./src/config/config.ts).
 
 ### Sinric Pro
 
-Before the configuration can be done, a Sinric Pro device must be created.
+Before the configuration can be filled in, a Sinric Pro device must be created.
 
 1. Open [Sinric Pro](https://sinric.pro/).
 2. Login
@@ -70,10 +70,10 @@ The config can look like this:
 };
 ```
 
-- `appKey` your sinric app key. The app key can be found [here](https://portal.sinric.pro/credential/list).
-- `secretKey` your sinric secret key. The secret key can be found [here](https://portal.sinric.pro/credential/list).
-- `deviceId` the device ID of the Sinric device that is used to trigger the coal heating. The device id can be found [here](https://portal.sinric.pro/device/list).
-- `ledAmount` is used to specify how many leds are connected to the Pi. This is only necessary if no other ledController is specified in the constructor.
+- `appKey` Your sinric app key. The app key can be found [here](https://portal.sinric.pro/credential/list).
+- `secretKey` Your sinric secret key. The secret key can be found [here](https://portal.sinric.pro/credential/list).
+- `deviceId` The device ID of the Sinric device that is used to trigger the coal heating. The device id can be found [here](https://portal.sinric.pro/device/list).
+- `ledAmount` LedAmount is used to specify how many leds are connected to the Pi. This is only necessary if no other ledController is specified in the constructor.
 
 ## Functions
 
@@ -89,7 +89,7 @@ The config can look like this:
 - `ledController`
   - optional
   - Type: [LedController](https://github.com/SteffenKn/WS2801-PI/blob/develop/src/index.ts#L44)
-  - The led controller that controls the leds of the connected led strip. If no value is specified, WS2801-webserver will create its own LedController with the LedAmount that is configured in the [default config](./src/config/config.ts).
+  - The led controller that controls the leds of the connected led strip. If no value is specified, WS2801-webserver will create its own LedController with the LedAmount configured in the [default config](./src/config/config.ts).
     - To avoid rendering problems, there should be only one LedController instance.
 
 ### start
