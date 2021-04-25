@@ -14,13 +14,10 @@ export class AlexaDeviceHandler {
   private config: Config;
 
   private running: boolean = false;
-  private initialized: boolean = false;
 
   constructor(config?: Config, ledController?: WS2801Controller) {
     this.config = config ? config : defaultConfig;
     this.ledController = new LedController(ledController, config);
-
-    this.sinric = new SinricPro(this.config.appKey, [this.config.deviceId], this.config.secretKey, true);
   }
 
   public start(): void {
@@ -29,25 +26,22 @@ export class AlexaDeviceHandler {
     }
 
     this.running = true;
-    this.initialize();
+    this.connect();
   }
 
   public stop(): void {
     this.running = false;
   }
 
-  private initialize(): void {
-    if (this.initialized) {
-      return;
-    }
-
-    this.initialized = true;
+  private connect(): void {
+    this.sinric = new SinricPro(this.config.appKey, [this.config.deviceId], this.config.secretKey, true);
 
     const callbacks: any = {
       setPowerState: this.setPowerState.bind(this),
       setBrightness: this.setBrightness.bind(this),
       setColor: this.setColor.bind(this),
       setColorTemperature: this.setColorTemperature.bind(this),
+      onDisconnect: this.handleDisconnect.bind(this),
     };
 
     SinricProActions(this.sinric, callbacks);
@@ -123,5 +117,11 @@ export class AlexaDeviceHandler {
     this.ledController.setColor(rgbColor);
 
     return true;
+  }
+
+  private handleDisconnect(): void {
+    console.log('Connection to SinricPro lost. Reconnecting...');
+
+    this.connect();
   }
 }
