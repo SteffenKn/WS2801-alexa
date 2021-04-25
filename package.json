@@ -1,6 +1,6 @@
 {
   "name": "ws2801-alexa",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An alexa connector for the WS2801-Pi module.",
   "main": "dist/index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/SteffenKn/ws2801-alexa#readme",
   "dependencies": {
-    "sinricpro": "2.2.5",
+    "sinricpro": "2.2.6",
     "ws2801-pi": "1.2.0"
   },
   "devDependencies": {
