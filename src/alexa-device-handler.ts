@@ -33,8 +33,10 @@ export class AlexaDeviceHandler {
     this.running = false;
   }
 
-  private connect(): void {
-    this.sinric = new SinricPro(this.config.appKey, [this.config.deviceId], this.config.secretKey, true);
+  private connect(isReconnect?: boolean): void {
+    const shouldRestoreState: boolean = !isReconnect;
+
+    this.sinric = new SinricPro(this.config.appKey, [this.config.deviceId], this.config.secretKey, shouldRestoreState);
 
     const callbacks: any = {
       setPowerState: this.setPowerState.bind(this),
@@ -122,6 +124,6 @@ export class AlexaDeviceHandler {
   private handleDisconnect(): void {
     console.log('Connection to SinricPro lost. Reconnecting...');
 
-    this.connect();
+    this.connect(true);
   }
 }
